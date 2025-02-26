@@ -1,42 +1,32 @@
-import express from "express";
-import * as dotenv from "dotenv";
-import cors from "cors";
-import helmet from "helmet";
-import userRoutes from "./users/users.routes";
+import * as dotenv from 'dotenv';
+import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
 
-// Load environment variables from .env file
+
+// Load environmental variables from .env file
 dotenv.config();
 
-// Validate PORT from .env
-const PORT: number = parseInt(process.env.PORT || "3000", 10);
-if (!PORT) {
-  console.error("PORT is not defined in .env file");
-  process.exit(1); // Exit the process if PORT is missing
+if (!process.env.PORT) {
+    console.log(`Error to get ports`);
+    process.exit(1);
 }
 
-// Initialize Express app
+const PORT: number = parseInt(process.env.PORT as string, 10);
+
+// Create Express server
 const app = express();
 
 // Middleware
-app.use(express.json()); // Parse JSON request body
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded body
-app.use(cors()); // Enable CORS
-app.use(helmet()); // Security headers
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use(helmet());
 
-// Log PORT to verify .env is loaded
-console.log(`Loaded PORT from .env: ${PORT}`);
 
-// Use Routes
-app.use("/users", userRoutes); // Attach user routes
-
-// Default Route
-app.get("/", (req, res) => {
-  res.send("Welcome to the REST API using TypeScript and Node.js!");
-});
-
-// Start Server
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-export default app;
+
